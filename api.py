@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify, make_response
-import uuid
 import jwt
-import datetime
 from functools import wraps
-import model
+from model import load_model, predict
 
 app = Flask(__name__)
+
+ai_model = load_model()
 
 def token_required(f):
     @wraps(f)
@@ -29,5 +29,10 @@ def home():
 
 @token_required
 @app.route("/predict", methods=['POST'])
-def predict():
-    return request.get_json()
+def predict_route():
+    json = request.get_json()
+    prompt = []
+    for item in json:
+        prompt.append(json[item])
+    prediction = predict(ai_model, prompt)
+    return prediction
