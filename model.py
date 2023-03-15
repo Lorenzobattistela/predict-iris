@@ -40,20 +40,17 @@ def load_model() -> KNeighborsClassifier:
 def main():
     df = get_df()
     classifier = train_model(df)
-    success_rate = test_model(df=df, classifier=classifier) * 100
-    print(f'Success rate: {success_rate}%')
-    prediction = predict(classifier, [6.8, 3.2, 5.9, 2.3])
-    if(prediction == 0):
-        print('It is a Iris-setosa')
-    elif prediction == 1:
-        print('It is a Iris-versicolor')
-    elif prediction == 2:
-        print('It is a Iris-virginica')
+    save_model(classifier)
+    
 
 def predict(model: KNeighborsClassifier, prompt: List[List]):
     pred = pd.DataFrame(np.array(prompt).reshape(1, -1), columns=['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)'])
-    return model.predict(pred)[0]
+    prediction = model.predict(pred)[0]
+    if(prediction == 0):
+        return('It is a Iris-setosa')
+    elif prediction == 1:
+        return('It is a Iris-versicolor')
+    elif prediction == 2:
+        return('It is a Iris-virginica')
 
-if __name__ == '__main__':
-    main()
 
